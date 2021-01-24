@@ -1,0 +1,59 @@
+#preview1 > img{
+	border:2px solid white;
+	border-radius:10px;
+	box-shadow:0px 0px 10px black;
+	width: 180px;
+	height: 180px;
+}
+.upload {
+    padding:5px 5px;
+    border-radius: 5px;
+    box-shadow:0px 0px 5px black;
+    margin-left:5%;
+    margin-top:10px;
+    cursor: pointer;
+}
+.logo {
+    position:relative;
+}
+#date1 {
+    z-index: 9999999;
+}
+#date2 {
+    z-index: 9999999;
+}
+#claimDate1 {
+     z-index: 9999999;
+}
+#claimDate2 {
+     z-index: 9999999;
+}
+#renewedDate1 {
+     z-index: 9999999;
+}
+#renewedDate2 {
+     z-index: 9999999;
+}
+#expiredDate1 {
+     z-index: 9999999;
+}
+#expiredDate2 {
+     z-index: 9999999;
+}
+.form-control {
+    border-top: 0;
+    border-bottom: 1px solid gray;
+    border-left: 0;
+    border-right: 0;
+    border-color: black;
+    background-color: #f2f2f2;
+}
+.hideTh {
+    display: none;
+}
+#search_id {
+    border-bottom:1px solid gray;
+    border-top:0;
+    border-right: 0;
+    border-left: 0;
+}

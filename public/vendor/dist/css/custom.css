@@ -1,0 +1,110 @@
+@font-face {
+    font-family: roboto-bold;
+    src: url(font/roboto/Roboto-Bold.woff2);
+}
+@font-face {
+    font-family: roboto-light;
+    src: url(font/roboto/Roboto-Light.woff2);
+}
+@font-face {
+    font-family: roboto-medium;
+    src: url(font/roboto/Roboto-Medium.woff2);
+}
+@font-face {
+    font-family: roboto-thin;
+    src: url(font/roboto/Roboto-Thin.woff2);
+}
+
+@font-face {
+    font-family: roboto-regular;
+    src: url(font/roboto/Roboto-Regular.woff2);
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    opacity: 1;
+}
+#blur > *:not(#spinners) {
+    filter: brightness(50%);
+}
+#quantt {
+    font-size: 30px;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    width: 40%;
+}
+.scroll {
+    max-height: 700px;
+    overflow-y: auto;
+}
+p.time {
+    font-size: 15px;
+}
+p.title-box {
+    font-size: 30px;
+}
+.item-hover {
+    background-color: #e8f5e9;
+}
+.ui-autocomplete {
+    z-index: 9999999 !important;
+}
+.loading-spinner {
+    position:absolute;
+    top: 40%;
+    left: 55%;
+    margin-left: -4em;
+    color:white;
+    z-index: 999999;
+}
+.selectDate{
+    outline: none;
+    width: 40%;
+    height: 8%;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px 1px black;
+}
+.selectDate > option{
+    font-size: 15px;
+    border-radius: 5px;
+    box-shadow: 0px 0px 1px 1px black;
+}
+.text-truncate {
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+.text-overflow {
+    float: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 200px;
+    display: block;
+    overflow: hidden
+}
+.text-overflow1 {
+    float: left;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    width: 250px;
+    display: block;
+    overflow: hidden
+}
+.selectStock {
+    font-size: 15px;
+    padding: 5px;
+    width: 250px;
+    border-radius: 5px;
+    border-color: teal;
+}
+.selectStock > option{
+    color:red;
+    
+}
+.amountdue {
+    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
+}
+
