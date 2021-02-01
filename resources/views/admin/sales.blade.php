@@ -27,6 +27,7 @@
                 </div>
               </div>
                 </div><!-- /.box-header -->
+                  <center style="font-size:20px">FROM: <strong>{{$startLabel}}</strong> TO: <strong>{{$endLabel}}</strong></center>
                   <canvas id="myChart" width="400" height="245" class="elevation-2"></canvas>
               </div>
           </div>
@@ -76,7 +77,7 @@
                     <div class="small-box bg-yellow">
                       <div class="inner">
                         <br>
-                        <p class="title-box text-black">{{$total_item}} </p>
+                        <p class="title-box text-black">{{number_format($total_item)}}</p>
                         <br>
                       </div>
                       <div class="icon">
@@ -150,7 +151,7 @@
         <form action="{{route('getwhatsales')}}" id="frmData" method="POST">
           @csrf
               <input type="text" name="start" id="start" hidden>
-              <input type="text" name="end" id="end" hidden>
+              <input type="text" name="end" id="end"  hidden>
               <input type="text" name="label" id="label" hidden>
           </form>
     </section>
@@ -294,12 +295,13 @@
                 bgcolor = 'rgba(0, 0, 0,0)';
               }
               var ctx = document.getElementById('myChart');
+              console.log(dataTotal);
               var myChart = new Chart(ctx, {
                   type: typeChart,
                   data: {
                       labels: dataDay,
                       datasets: [{
-                          label: "TOTAL SALES",
+                          label: "TOTAL INCOME",
                           backgroundColor:bgcolor,
                           borderColor:'#5c6bc0',
                           borderWidth:3,

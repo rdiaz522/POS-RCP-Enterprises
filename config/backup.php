@@ -212,7 +212,8 @@ return [
          * No matter how you configure it the default strategy will never
          * delete the newest backup.
          */
-        'strategy' => \Spatie\Backup\Tasks\Cleanup\Strategies\BackupCleaner::class,
+        'strategy' => \Spatie\Backup\Tasks\Cleanup\Strategies\DefaultStrategy::class,
+        // 'strategy' => \Spatie\Backup\Tasks\Cleanup\Strategies\BackupCleaner::class,
 
         'default_strategy' => [
 

@@ -77,7 +77,7 @@
                 <div class="small-box bg-yellow">
                   <div class="inner">
                     <br>
-                    <p class="title-box text-black">{{$total_item}}</p>
+                    <p class="title-box text-black">{{number_format($total_item)}}</p>
                     <br>
                   </div>
                   <div class="icon">
@@ -221,11 +221,12 @@ $(document).ready(function(){
           var num = x.toLocaleString();
           return num;
       }
-    
-      $.ajax({
-          url:'index.php/getSales',
-          method:'GET',
-          success:function(data){
+
+      async function getSales(){
+              const data = await fetch('index.php/getSales')
+              .then(res => res.json())
+              .catch(error => location.reload());
+              console.log(data);
               const dateArray = [];
               const subtotalArray = [];
               for(let i = 0; i < data.length;i++){
@@ -268,7 +269,7 @@ $(document).ready(function(){
                   data: {
                       labels: dataDay,
                       datasets: [{
-                          label: "TOTAL SALES",
+                          label: "TOTAL INCOME",
                           data: dataTotal,
                           backgroundColor: [
                               '#5c6bc0',
@@ -277,8 +278,10 @@ $(document).ready(function(){
                               '#5c6bc0',
                               '#5c6bc0',
                               '#5c6bc0',
+                              '#66ff66',
                           ],
                           borderColor: [
+                              '#5c6bc0',
                               '#5c6bc0',
                               '#5c6bc0',
                               '#5c6bc0',
@@ -299,13 +302,10 @@ $(document).ready(function(){
                       }
                   }
               });
+      }
 
-
-
-            // end success
-          }
-
-      })
+      getSales();
+  
 })
       
 </script>

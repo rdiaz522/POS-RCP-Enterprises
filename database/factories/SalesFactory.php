@@ -11,9 +11,13 @@ $factory->define(Sales::class, function (Faker $faker) {
         'name' => $faker->name,
         'unit' => $faker->name,
         'price' => $faker->randomDigit,
+        'profit' => $faker->randomDigit,
         'quantity' => $faker->randomDigit,
         'subtotal' => $faker->randomDigit,
-        'created_at' => '2019-04-21 09:13:55',
-        'updated_at' => '2019-04-21 09:13:55'
+        'cashier' => 'Cashier101',
+        'barcode' => $faker->ean13,
+        'vatable' => 'N',
+        'created_at' => '2021-01-10 09:13:55',
+        'updated_at' => '2021-01-10 09:13:55'
     ];
 });

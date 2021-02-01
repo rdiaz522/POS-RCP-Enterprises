@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="/vendor/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 </head>
 <body class="hold-transition skin-purple sidebar-mini fixed" id="notblur">
+  @if (file_exists(public_path('/storage/product_images/no_image.png')) && file_exists(public_path('/storage/beep-07.wav')))
     @include('inc.sidebar')
     @include('inc.navbar')
     <span class="loading-spinner text-white" id="spinners"> <i class="fas fa-spinner fa-3x fa-spin"></i></span>
@@ -43,6 +44,23 @@
             
         </div>
     </div>
+    @else
+    <h1 style="font-family:fantasy;font-size:60px">BEWARE! THIS IS ILLEGAL!!!</h1>
+    <h1 style="font-family:Fantasy;color:red">
+        PLEASE DO NOT COPY THE PROGRAM! <br>
+        THIS PROGRAM HAS A COPY RIGHT!
+        <br><br>
+        PLEASE DO NOT COPY THE PROGRAM! <br>
+        THIS PROGRAM HAS A COPY RIGHT!
+        <br>
+        <br>
+        PLEASE DO NOT COPY THE PROGRAM! <br>
+        THIS PROGRAM HAS A COPY RIGHT!
+        <br>
+    </h1>
+    <h1 style="font-family:fantasy;font-size:60px">PLEASE CONTACT THE DEVELOPER!</h1> <br>
+    <h2>CONTACT NO. #09355302505</h2>
+    @endif
     <script src="/vendor/plugins/jQuery/jQuery-2.1.4.min.js"></script>
     <script src="/vendor/plugins/slimScroll/jquery.slimscroll.min.js"></script>
     <script src="/vendor/plugins/moment/moment.min.js"></script>

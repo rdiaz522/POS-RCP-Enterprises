@@ -40,8 +40,10 @@ class salesController extends Controller
     public function getWhatSales(Request $request){
         $date_str = date_create($request->start);
         $start = date_format($date_str,"Y-m-d H:i:s");
+        $startLabel = date_format($date_str,"M-d-Y");
         $date_end = date_create($request->end);
         $end = date_format($date_end,"Y-m-d H:i:s");
+        $endLabel =  date_format($date_end,"M-d-Y");
         $label = $request->label;
         $invoices = [];
         if($label == 'Today'){
@@ -59,7 +61,7 @@ class salesController extends Controller
             ->get();
         }
             
-       return view('admin.sales')->with(['sales' => $sales, 'label' => $label,'invoices' => $invoices]);
+       return view('admin.sales')->with(['sales' => $sales, 'label' => $label,'invoices' => $invoices,'startLabel' => $startLabel, 'endLabel' => $endLabel]);
  
     }
     /**

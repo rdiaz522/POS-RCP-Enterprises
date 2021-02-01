@@ -8,7 +8,7 @@ use Faker\Generator as Faker;
 
 $factory->define(Stocks::class, function (Faker $faker) {
     return [
-        'id' => $faker->unique(true)->numberBetween(1, 200),
+        'id' => $faker->unique(true)->numberBetween(0, 200),
         'quantity' => $faker->numberBetween(1000, 9000),
     ];
 });

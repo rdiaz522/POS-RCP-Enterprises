@@ -456,10 +456,10 @@
             })
 
             //ajax fetch all products
-            $.ajax({
-                url:'/index.php/index.php/getProducts',
-                method:'GET',
-                success:function(data){
+            async function getdata(){
+                const data = await fetch('/index.php/index.php/getProducts')
+                .then(res => res.json())
+                .catch(err => location.reload());
                    let product = [];
                    let product_name = [];
                    let amount_total = 0;
@@ -486,9 +486,7 @@
                         const dataObj = Object.assign({id:id,barcode:barcode,name:name,price:price,profit:profit,stock:stock,image:image,unit:unit,status:status,net_wt:net_wt});
                         product.push(dataObj);
                         product_name.push(name+' '+net_wt);
-                   
                    }
-
                     //payment processing..
                     pay_proceed = () => {
                         if(parseFloat($('#cash').val()) >= amount_total){
@@ -1123,8 +1121,7 @@
                     })
                     
                 }   
-            })
-
+            getdata();
             $('#salesTable').on('click',".void",function(){
                 console.log('HELLO');
                 var data = $(this).data('stuff');
