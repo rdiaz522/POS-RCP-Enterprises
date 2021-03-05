@@ -86,6 +86,7 @@ class productController extends Controller
         $products->supplier_id = $request->supplier;
         $products->status = $request->status;
         $products->image = $filename;
+        $products->added_by = auth()->user()->username;
         $products->save();
         $product_id = $products->id;
         $stock = new Stocks;

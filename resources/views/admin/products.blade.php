@@ -20,10 +20,16 @@
                             <th>PRICE</th>
                             <th>QUANTITY</th>
                             <th>PROFIT</th>
+                            <th>ADDED BY</th>
                             <th class="none">BRAND</th>
                             <th class="none">CATEGORY:</th>
                             <th class="none">SUPPLIER:</th>
-                            <th class="all">CONTROL</th>
+                            @if (Auth::user()->roles->first()->name == 'Staff')
+                                 <th class="none">CONTROL</th>
+                            @else
+                                 <th class="all">CONTROL</th>
+                            @endif
+                           
                         </tr>
                     </thead>
                     <tbody>    
@@ -39,6 +45,7 @@
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->price,2)}}</td>
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{number_format($product->stocks->quantity)}}</td>
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->profit,2)}}</td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->added_by}}</td>
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->brand}}</td>
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">@if ($product->categories !== null)
                                         {{$product->categories->name}}

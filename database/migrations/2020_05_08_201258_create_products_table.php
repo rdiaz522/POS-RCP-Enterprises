@@ -26,6 +26,7 @@ class CreateProductsTable extends Migration
             $table->string('image')->nullable();
             $table->unsignedBigInteger('category_id')->nullable();
             $table->unsignedBigInteger('supplier_id')->nullable();
+            $table->string('added_by')->nullable();
             $table->timestamps();
         });
     }

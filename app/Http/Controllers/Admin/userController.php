@@ -46,7 +46,7 @@ class userController extends Controller
 
         $role = Role::where('id', $request->role)->first();
         $user = new User;
-        $user->username = $request->username;
+        $user->username = ucwords($request->username);
         $user->password = Hash::make($request->password);
         $user->save();
         $user->roles()->attach($role);
