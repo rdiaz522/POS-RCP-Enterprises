@@ -28,14 +28,14 @@
     <div class="wrapper">
       <div class="content-wrapper" >
          <!-- Content Header (Page header) -->
-            <section class="content-header">
+            <section class="content-header" >
                 <h1>
                   @yield('container-title')
                 </h1>
             </section>
             <!-- Main content -->
 
-            <section class="content">
+            <section class="content" style="height:100%;">
                 @yield('content')
               <!-- Your Page Content Here -->
               <div style="bottom:100%;"><strong>Copyright © <span id="year"></span> RonDevIT </strong></div>

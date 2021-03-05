@@ -183,7 +183,7 @@
           </a>
         </li>
 
-        <li class="users">
+        <li class="customers">
           <a href="{{route('customer.index')}}" class="customer" id="customer">
             <i class="fas fa-users"></i>
             <span>&nbsp Customer Management</span>

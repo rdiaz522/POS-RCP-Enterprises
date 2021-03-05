@@ -42,10 +42,11 @@
                                     <td class="text-truncate">{{$stock->oldstock}}</td>
                                     @if ($stock->status == 'Stock In')
                                         <td class="bg-success ">{{$stock->status}} </td>
+                                        <td class="text-truncate">+{{$stock->quantity}}</td>
                                     @else
                                         <td class="bg-danger">{{$stock->status}} </td>
+                                        <td class="text-truncate">-{{$stock->quantity}}</td>
                                     @endif
-                                    <td class="text-truncate">{{$stock->quantity}}</td>
                                     <td class="text-truncate">{{$stock->newstock}}</td>
                                     <td class="text-truncate" style="max-width: 100px">{{$stock->description}}</td>
                                     <td class="text-truncate">{{$stock->stock_by}}</td>

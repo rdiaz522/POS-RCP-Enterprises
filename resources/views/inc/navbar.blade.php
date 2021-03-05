@@ -129,11 +129,11 @@
               Logout
             </a>
             <ul class="dropdown-menu">
-              <li>
-              <a href="{{route('logout')}}" class="btn btn-success text-dark">Yes</a>
+              <li style="border:1px solid black">
+              <a href="{{route('logout')}}" class="btn btn-secondary text-black">Yes</a>
               </li>
-              <li>
-                <a href="#" class="btn btn-danger text-dark">No</a>
+              <li style="border:1px solid black">
+                <a href="#" class="btn btn-secondary text-black">No</a>
               </li>
             </ul>
           </li>

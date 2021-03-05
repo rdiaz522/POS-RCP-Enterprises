@@ -209,7 +209,7 @@ class salesController extends Controller
                 $printer -> text("Amount\n");
                 $printer -> text("===============================\n");
                 $printer -> setEmphasis(false);
-            
+                $printer -> pulse();
                 /* Items */
                 foreach($items as $item) {
                     $printer -> text(str_pad($item->name,30," "));

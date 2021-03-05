@@ -53,6 +53,13 @@ $(document).ready(function() {
             $('.sidebar-menu > .users').prop("class","");
       }
 
+      if($(".customer").prop("href")==window.location.href){
+         $('.sidebar-menu > .customers').prop("class","active customers");
+         }
+      else{
+            $('.sidebar-menu > .customers').prop("class","");
+      }
+
       if($(".stock").prop("href")==window.location.href){
          $('.sidebar-menu > .stocks').prop("class","active stocks");
          }
@@ -77,6 +84,11 @@ $(document).ready(function() {
      })
 
       $('#user').on('click', function(){
+         $('.loading-spinner').show();
+         $('#notblur').attr('id', 'blur');
+      })
+
+      $('#customer').on('click', function(){
          $('.loading-spinner').show();
          $('#notblur').attr('id', 'blur');
       })

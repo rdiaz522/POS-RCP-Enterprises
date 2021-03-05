@@ -29,7 +29,7 @@
     <!-- sidebar menu: : style can be found in sidebar.less -->
     <ul class="sidebar-menu">
       <li class="header">MENU</li>
-      <li><a href="#" id="add_item"><i class="fas fa-search"></i> <span> SEARCH PRODUCT - [SHIFT]</span></a></li>
+      <li><a href="#" id="add_item"><i class="fas fa-search"></i> <span> SEARCH PRODUCT - [F8]</span></a></li>
       <li><a href="#" id="customers"><i class="fas fa-search"></i> <span> SEARCH CUSTOMER - [`]</span></a></li>
       <li><a href="#" id="cancel_transac"><i class="fas fa-trash"></i><span> EMPTY CART - [DELETE]</span></a></li>
       <li><a href="#" id="print_receipt"><i class="fas fa-print"></i> PRINT RECEIPT</span></a></li>
