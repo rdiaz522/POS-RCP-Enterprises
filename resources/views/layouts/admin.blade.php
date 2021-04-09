@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/vendor/Responsive-2.2.5/css/responsive.dataTables.min.css">
     <link rel="stylesheet" href="/vendor/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
 </head>
-<body class="hold-transition skin-purple sidebar-mini fixed" id="notblur">
+<body class="hold-transition skin-purple sidebar-mini fixed" id="blur">
   @if (file_exists(public_path('/storage/product_images/no_image.png')) && file_exists(public_path('/storage/beep-07.wav')))
     @include('inc.sidebar')
     @include('inc.navbar')

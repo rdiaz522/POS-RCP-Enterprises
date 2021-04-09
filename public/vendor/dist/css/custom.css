@@ -26,6 +26,7 @@ input[type="number"]::-webkit-outer-spin-button {
 }
 #blur > *:not(#spinners) {
     filter: brightness(50%);
+    z-index: 1000000;
 }
 #quantt {
     font-size: 30px;

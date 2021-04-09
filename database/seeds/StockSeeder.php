@@ -11,7 +11,7 @@ class StockSeeder extends Seeder
      */
     public function run()
     {
-        for($i = 1; $i <= 200; $i++){
+        for($i = 1; $i <= 500; $i++){
             Stocks::create([
                 'id' => $i,
                 'quantity' => 100

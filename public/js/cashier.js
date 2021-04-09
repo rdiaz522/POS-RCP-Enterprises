@@ -140,9 +140,9 @@ $(document).ready(function(){
                 const status = data[i].status;
                 const net_wt = data[i].net_wt;
                 const profit = data[i].profit;
-                const dataObj = Object.assign({id:id,barcode:barcode,name:name,price:price,profit:profit,stock:stock,image:image,unit:unit,status:status,net_wt:net_wt});
+                const dataObj = Object.assign({id:id,barcode:barcode,name:name,price:price,profit:profit,stock:stock,image:image,unit:unit,status:status,net_wt:net_wt,brand:brand});
                 product.push(dataObj);
-                product_name.push(name+' '+net_wt);
+                product_name.push(name+' '+net_wt+' '+brand);
            }
             //payment processing..
             pay_proceed = () => {
@@ -196,12 +196,42 @@ $(document).ready(function(){
             $('#removedisc').on('click', function(){
                 $('.customercart').html('');
                 $('.customerdiscount').html('0');
+                $('#less').val('');
                 discount = 0;
                 customer = '';
                 business_tyle = '';
                 customer_address = '';
             })
 
+            $('#less').on('keyup', function() {
+                const price = $('#price').val();
+                if($(this).val() > parseInt(price)) {
+                    $(this).val('');
+                }
+            })
+
+            function roundToTwo(num) {    
+                return +(Math.round(num + "e+2")  + "e-2");
+            }
+
+            applyDiscount = (price) => {
+                if(customer && customer !== '') {
+                    const currentPrice = price;
+                    const newDiscount = 100 - parseInt(discount);
+                    const disc = roundToTwo(newDiscount);
+                    const totalPrice = disc * parseFloat(currentPrice.replace(/,/g, '')) / 100;
+                    return roundToTwo(totalPrice);
+                }else{
+                    const currentPrice = price;
+                    const less = $('#less').val();
+                    const newDiscount = less / currentPrice * 100;
+                    discount = roundToTwo(newDiscount);
+                    $('.customerdiscount').html(discount);
+                    const disc = 100 - discount;
+                    const totalPrice = disc * parseFloat(currentPrice.replace(/,/g, '')) / 100;
+                    return roundToTwo(totalPrice);
+                }
+            }
         // data items output on tables
            dataoutput = () => {
                 let total_all = 0;
@@ -491,7 +521,7 @@ $(document).ready(function(){
                         select:function(){
                             setTimeout(() => {
                                 product.filter((item,key) => {
-                                if(item.name+' '+item.net_wt === $(this).val()){
+                                if(item.name+' '+item.net_wt+' '+item.brand === $(this).val()){
                                     $('#id').val(item.id);
                                     $('#codebar').val(item.barcode);
                                     $('#unit').val(item.unit);
@@ -500,7 +530,7 @@ $(document).ready(function(){
                                     $('#net_wt').val(item.net_wt);
                                     $('#quantity').attr('max', item.stock);
                                     $('#stocks').val(item.stock);
-                                    $('#quantity').focus();
+                                    $('#less').focus();
                                     $('#status').val(item.status);
                                     $('#profit').val(item.profit);
                                     }
@@ -516,11 +546,12 @@ $(document).ready(function(){
                             if(quantity <= parseInt($('#stocks').val())){
                                 $('#payment').attr('disabled', false);
                                 const item_price = $('#price').val();
-                                let disc = 100 - parseInt(discount);
+                                applyDiscount(item_price);
+                                const priceTotal =  applyDiscount(item_price);
                                 let price;
                                 let subtotal;
                                 if(discount > 0){
-                                   price = disc * parseFloat(item_price.replace(/,/g, '')) / 100;
+                                   price = priceTotal;
                                    subtotal = quantity * price;
                                 }else{
                                     price = parseFloat(item_price.replace(/,/g, ''));
@@ -536,6 +567,7 @@ $(document).ready(function(){
                                                 if(newquantity <= parseInt($('#stocks').val())){
                                                     i.subtotal = findDecimal(pretotal);
                                                     i.quantity = newquantity;
+                                                    i.discount = discount;
                                                     PlaySound();
                                                     dataoutput();
                                                     $('#search').val('');
@@ -551,14 +583,13 @@ $(document).ready(function(){
                                                     $('#status').val('');
                                                     $('#net_wt').val('');
                                                     $('.errorstock').html('');
-                    
                                                 }else{
                                                    $('.errorstock').html('Out of Stock!, Please check your cart and stock!');
                                                 }
                                         }
                                     }); 
                                 }else{
-                                    const cartObj = Object.assign({id:$('#id').val(),barcode:$('#codebar').val(),name:$('#name').val(),unit:$('#unit').val(),price:$('#price').val(),profit:$('#profit').val(),status:$('#status').val(),net_wt:$('#net_wt').val(),quantity:quantity,subtotal:findDecimal(totalSub)})
+                                    const cartObj = Object.assign({id:$('#id').val(),barcode:$('#codebar').val(),name:$('#name').val(),unit:$('#unit').val(),price:$('#price').val(),profit:$('#profit').val(),status:$('#status').val(),net_wt:$('#net_wt').val(),quantity:quantity,subtotal:findDecimal(totalSub),discount:discount})
                                     cart.push(cartObj);
                                     barcodes.push($('#codebar').val());
                                     PlaySound();
@@ -575,8 +606,10 @@ $(document).ready(function(){
                                     $('#stocks').val('');
                                     $('#status').val('');
                                     $('#net_wt').val('');
+                                    $('#less').val('');
                                     $('.errorstock').html('');
                                 }
+                                console.log(cart);
                             }else{
                                 $('.errorstock').html('Out of Stock!, Please check your cart and stock!');
                             }
@@ -650,6 +683,11 @@ $(document).ready(function(){
                     $('#search').focus();
                     addItems();
                 }, 1000);
+                if(customer && customer !== '') {
+                    $('#less').prop('disabled', true);
+                }else{
+                    $('#less').prop('disabled', false);
+                }
            })
            $('#customers').click(function(){
                 $('#searchcustomer').modal('show');
@@ -674,6 +712,8 @@ $(document).ready(function(){
                $('#barcode').focus();
                $('.cash').html('');
                $('#change').html('');
+               discount = 0;
+               $('.customerdiscount').html('0');
            })
 
            $("input[name=barcode]").on("keydown", function(e) {
@@ -725,6 +765,11 @@ $(document).ready(function(){
                 //key ctrl Arrow to show search item modal
                 if ( code == 119 ) {
                     $('#new_item').modal('show');
+                    if(customer && customer !== '') {
+                        $('#less').prop('disabled', true);
+                    }else{
+                        $('#less').prop('disabled', false);
+                    }
                         e.preventDefault();
                         setTimeout(() => {
                             $('#search').prop('disabled', false);
@@ -768,6 +813,12 @@ $(document).ready(function(){
                     $('#barcode').focus();
                     $('.cash').html('');
                     $('#change').html('');
+                    $('.customerdiscount').html('0');
+                    $('.customercart').html('');
+                    discount = 0;
+                    customer = '';
+                    business_tyle = '';
+                    customer_address = '';
                 }
             })
             

@@ -35,11 +35,13 @@
                                         @can('admin')
                                           <form action="{{route('user.destroy',$user->id)}}" id="{{$user->id}}" method="POST">
                                                 @foreach ($user->roles as $roles)
-                                                <a href="#" class="edit btn btn-primary btn-sm" data-stuff='[&#34;{{$user->username}}&#34;, &#34;{{$roles->name}}&#34;, &#34;{{$user->id}}&#34;]'>Edit</a>
+                                                <a href="#" class="edit btn btn-primary btn-sm" data-stuff='[&#34;{{$user->username}}&#34;, &#34;{{$roles->name}}&#34;, &#34;{{$user->id}}&#34;,&#34;{{$user->password}}&#34;]'>Edit</a>
                                                 @endforeach
                                                 @csrf
                                                 @method('DELETE')
-                                          <button type="submit" class="btn btn-danger btn-sm delete" data-id="{{$user->id}}">Delete</button>
+                                                @if ($user->id !== 1)
+                                                    <button type="submit" class="btn btn-danger btn-sm delete" data-id="{{$user->id}}">Delete</button>
+                                                @endif
                                           </form>
                                           @endcan
                                           </td> 
@@ -123,9 +125,13 @@
                             <input type="text" name="username" id="usernamee" class="form-control">
                         </div>
                         <div class="form-group">
+                            <label for="name">Password</label>
+                            <input type="password" name="password" id="passworde" class="form-control">
+                        </div>
+                        <div class="form-group">
                             <label for="name">Role</label>
                             <select name="rolee" id="rolee" class="form-control">
-                                <option value="Admin">Admin</option>
+                                <option id="admin" value="Admin">Admin</option>
                                 <option value="Cashier">Cashier</option>
                                 <option value="Staff">Staff</option>
                              </select>
@@ -144,7 +150,6 @@
 @section('script')
     <script>
        $(document).ready(function(){
-            $('.loading-spinner').hide();
             $('.spinner').hide();
             $('#mytable').DataTable({
                 order: [ [0, 'desc'] ],
@@ -205,10 +210,17 @@
             })
             $('.edit').on('click', function() {
                 var data = $(this).data('stuff');
-                console.log(data);
                 $('#edituser').modal('show');
                 $('#usernamee').val(data[0]);
+                $('#passworde').val(data[3]);
                 $('#rolee').val(data[1]).change();
+                if(data[2] == 1) {
+                    $('#rolee > option[value="Staff"').hide();
+                    $('#rolee > option[value="Cashier"').hide();
+                } else{
+                    $('#rolee > option[value="Staff"').show();
+                    $('#rolee > option[value="Cashier"').show();
+                }
                 $('.update').on('click', function(){
                     $('.spinner').show();
                     $(this).attr('disabled', true);
@@ -233,6 +245,8 @@
                     }
                 })
             })
+            $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
        })
     </script>
 @endsection

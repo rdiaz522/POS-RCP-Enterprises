@@ -32,7 +32,8 @@
                     </thead>
                     <tbody>
                         @if (count($stocks) > 0)
-                            @foreach ($stocks as $stock)
+                           @foreach ($stocks->chunk(250) as $item)
+                                @foreach ($item as $stock)
                                 <tr>
                                     <td>{{$stock->id}}</td>
                                     <td class="text-truncate" style="max-width: 100px">{{$stock->item}}</td>
@@ -53,6 +54,7 @@
                                     <td class="text-truncate" style="max-width: 100px">{{$stock->created_at->calendar()}}</td>
                                 </tr>
                             @endforeach
+                           @endforeach
                         @endif
                     </tbody>
                 </table>
@@ -68,41 +70,43 @@
 @endsection
 
 @section('script')
-    <script>
-        $('.loading-spinner').hide();
-        $('.spinner').hide();
-        $('#mytable').DataTable({
-            responsive:true,
-            order: [ [0, 'desc'] ],
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
-        $('#daterange-btn').daterangepicker(
-      {
-        ranges   : {
-          'Today' : [moment(), moment()],
-          'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-          'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
-          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-          'This Month'  : [moment().startOf('month'), moment().endOf('month')],
-          'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+ <script>
+        $(document).ready(function() {
+            $('.spinner').hide();
+            $('#mytable').DataTable({
+                responsive:true,
+                order: [ [0, 'desc'] ],
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+            $('#daterange-btn').daterangepicker(
+        {
+            ranges   : {
+            'Today' : [moment(), moment()],
+            'Yesterday'   : [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days' : [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month'  : [moment().startOf('month'), moment().endOf('month')],
+            'Last Month'  : [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            },
         },
-      },
-      function (start, end, label) {
-        $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-        $('#start').val(start.format('YYYY-MM-D'));
-        $('#end').val(end.format('YYYY-MM-D'));
-        $('#label').val(label);
-        $('.loading-spinner').show();
-        $('#notblur').attr('id', 'blur');
-        setTimeout(() => {
-            $('#frmData').submit();
-        }, 500);
-       
-      }
-    )
-
-    </script>
+        function (start, end, label) {
+            $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            $('#start').val(start.format('YYYY-MM-D'));
+            $('#end').val(end.format('YYYY-MM-D'));
+            $('#label').val(label);
+            $('.loading-spinner').show();
+            $('#notblur').attr('id', 'blur');
+            setTimeout(() => {
+                $('#frmData').submit();
+            }, 500);
+        
+        }
+        )
+        $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
+    })
+ </script>
 @endsection

@@ -35,32 +35,34 @@
                     </thead>
                     <tbody>    
                         @if (count($products) > 0)
-                        @foreach ($products as $product)
-                            @if ($product->stocks !== null)
-                            <tr>
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->barcode}}</td>
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->name}}</td>
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->net_wt}}</td>
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->unit}}</td>
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->stocks->quantity}}</td>
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->brand}}</td>
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">@if ($product->categories !== null)
-                                    {{$product->categories->name}}
-                                @else
-                                    {{'Pending'}}
-                                @endif </td>
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">@if($product->suppliers !== null)
-                                    {{$product->suppliers->name}}
-                                @else
-                                    {{'Pending'}}
-                                @endif</td>
-                                
-                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">
-                                    <a href="#" class="stockin btn btn-success btn-sm" data-stuff='[&#34;{{$product->id}}&#34;, &#34;{{$product->name}}&#34;, &#34;{{$product->stocks->quantity}}&#34;]'><i class="fas fa-plus-circle"></i> Stocking</a>
-                                </td>
-                           
-                            </tr>
-                            @endif
+                        @foreach ($products->chunk(250) as $item)
+                            @foreach ($item as $product)
+                                @if ($product->stocks !== null)
+                                <tr>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->barcode}}</td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->name}}</td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->net_wt}}</td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->unit}}</td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->stocks->quantity}}</td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->brand}}</td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">@if ($product->categories !== null)
+                                        {{$product->categories->name}}
+                                    @else
+                                        {{'Pending'}}
+                                    @endif </td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">@if($product->suppliers !== null)
+                                        {{$product->suppliers->name}}
+                                    @else
+                                        {{'Pending'}}
+                                    @endif</td>
+                                    
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">
+                                        <a href="#" class="stockin btn btn-success btn-sm" data-stuff='[&#34;{{$product->id}}&#34;, &#34;{{$product->name}}&#34;, &#34;{{$product->stocks->quantity}}&#34;]'><i class="fas fa-plus-circle"></i> Stocking</a>
+                                    </td>
+                            
+                                </tr>
+                                @endif
+                            @endforeach
                         @endforeach
                         @endif  
                     </tbody>
@@ -119,7 +121,6 @@
 @section('script')
    <script>
     $(document).ready(function(){
-        $('.loading-spinner').hide();
         $('.spinner').hide();
         var total = 0;
         var stockout =0;
@@ -251,7 +252,8 @@
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
         }); 
-         
+        $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
     })
    </script>
 @endsection

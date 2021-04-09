@@ -74,6 +74,7 @@
                         <th class="all">UNIT PRICE</th>
                         <th class="all">QUANTITY</th>
                         <th class="all">SUBTOTAL</th>
+                        <th class="all">DISCOUNT</th>
                         <th>CASHIER</th>
                         <th class="all">CONTROL</th>
                     </tr>
@@ -94,6 +95,7 @@
                                 <td>₱ {{number_format($sale->price,2)}}</td>
                                 <td>{{$sale->quantity}}</td>
                                 <td>₱ {{$sale->subtotal}}</td>
+                                <td>{{$sale->discount}}%</td>
                                 <td>{{$sale->cashier}}</td>
                                 <td><a id="{{$sale->id}}"  data-stuff='[&#34;{{$sale->id}}&#34;, &#34;{{$sale->invoice_number}}&#34;, &#34;{{$sale->name}}&#34;, &#34;{{$sale->net_wt}}&#34;, &#34;{{$sale->unit}}&#34;,&#34;{{$sale->price}}&#34;,&#34;{{$sale->quantity}}&#34;,&#34;{{$sale->subtotal}}&#34;,&#34;{{$sale->cashier}}&#34;,&#34;{{$sale->barcode}}&#34;,&#34;{{$sale->profit}}&#34;]' class="void btn btn-danger btn-sm"><i class="fas fa-ban"></i> Cancel</a>
                                 </td>
@@ -130,18 +132,9 @@
                 <input type="hidden" name="id" id="id" class="form-control" readonly>
                 <input type="hidden" name="status" id="status" class="form-control" readonly>
                 <input type="hidden" name="profit" id="profit" class="form-control">
-               <div class="form-group">
-                <label>Item Name</label>
-                <input type="text" name="name" id="name" class="form-control form-control-sm" readonly>
-               </div>
-               <div class="form-group">
-                <label>Net WT.</label>
-                <input type="text" name="net-wt" id="net_wt" class="form-control form-control-sm" readonly>
-               </div>
-               <div class="form-group">
-                <label>Unit</label>
-                <input type="text" name="unit" id="unit" class="form-control form-control-sm" readonly>
-               </div>
+                <input type="hidden" name="name" id="name" class="form-control form-control-sm" readonly>
+                <input type="hidden" name="net-wt" id="net_wt" class="form-control form-control-sm" readonly>
+                <input type="hidden" name="unit" id="unit" class="form-control form-control-sm" readonly>
                <div class="form-group">
                 <label>Unit Price</label>
                 <input type="text" name="price" id="price" class="form-control form-control-sm" readonly>
@@ -151,11 +144,15 @@
                 <input type="text" name="stock" id="stocks" class="form-control form-control-sm" readonly>
                </div>
                <div class="form-group">
+                <label>Discount Amount</label>
+                <input type="number" name="less" id="less" class="form-control" placeholder="Discount Amount">
+            </div>
+               <div class="form-group">
                 <label>Quantity</label>
-                    <input type="number" name="quantity" id="quantity" min=1 class="form-control form-control-sm">
+                    <input type="number" name="quantity" id="quantity" min=1 class="form-control form-control-sm" placeholder="Quantity">
                     <strong class="errorstock text-danger"></strong>
-               </div>
-              <div class="form-group">
+                </div>
+                <div class="form-group">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-window-close"></i>Close -[Esc]</button>
                 <button type="submit" class="btn btn-primary btn-sm" id="add_cart"><i class="fas fa-share-square"></i>Add to cart -[Enter]</button>
                 <button type="submit" class="btn btn-warning btn-sm" id="clearing"><i class="fas fa-share-square"></i>Clear -[Home]</button>
@@ -310,7 +307,6 @@
 @endsection
 
 @section('script')
-    <script src="{{asset('js/appCashier.js')}}"></script>
     <script>
         const token = "{{ csrf_token() }}";
         if('{{session("success")}}'){
@@ -342,4 +338,5 @@
             )
         }
     </script>
+    <script src="{{asset('js/appCashier.js')}}"></script>
 @endsection

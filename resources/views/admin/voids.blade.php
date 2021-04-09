@@ -22,31 +22,33 @@
                             <th>QUANTITY</th>
                             <th class="all">CASHIER</th>
                             <th class="all">STATUS</th>
-                            <th class="none">REASON:</th>
+                            <th class="none">REMARKS:</th>
                             <th class="all">DATE OF TRANSACTION</th>
                         </tr>
                     </thead>
                     <tbody>
                         @if (count($voids) > 0)
-                            @foreach ($voids as $void)
-                                <tr>
-                                    <td></td>
-                                    <td>{{$void->id}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$void->invoice_number}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$void->name}}</td>
-                                    <td>{{$void->net_wt}}</td>
-                                    <td>{{$void->unit}}</td>
-                                    <td>₱ {{number_format($void->price,2)}}</td>
-                                    <td>{{$void->quantity}}</td>
-                                    <td>{{$void->cashier}}</td>
-                                     @if ($void->status == 'Rejected')
-                                        <td class="bg-danger">{{$void->status}}</td>
-                                    @else
-                                        <td class="bg-success">{{$void->status}}</td>
-                                    @endif
-                                    <td>{{$void->reason}}</td>
-                                    <td>{{$void->created_at->calendar()}}</td>
-                                </tr>
+                            @foreach ($voids->chunk(250) as $item)
+                               @foreach ($item as $void)
+                               <tr>
+                                <td></td>
+                                <td>{{$void->id}}</td>
+                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$void->invoice_number}}</td>
+                                <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$void->name}}</td>
+                                <td>{{$void->net_wt}}</td>
+                                <td>{{$void->unit}}</td>
+                                <td>₱ {{number_format($void->price,2)}}</td>
+                                <td>{{$void->quantity}}</td>
+                                <td>{{$void->cashier}}</td>
+                                 @if ($void->status == 'Rejected')
+                                    <td class="bg-danger">{{$void->status}}</td>
+                                @else
+                                    <td class="bg-success">{{$void->status}}</td>
+                                @endif
+                                <td>{{$void->reason}}</td>
+                                <td>{{$void->created_at->calendar()}}</td>
+                            </tr>
+                               @endforeach
                             @endforeach
                         @endif
                     </tbody>
@@ -58,7 +60,6 @@
 
 @section('script')
     <script>
-        $('.loading-spinner').hide();
         $('#mytable').DataTable({
             responsive:true,
             order: [ [1, 'desc'] ],
@@ -67,5 +68,7 @@
                 'copy', 'csv', 'excel', 'pdf', 'print'
             ]
         });
+        $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
     </script>
 @endsection

@@ -34,7 +34,9 @@
                                      @csrf
                                      @method('DELETE')
                                      <a href="#" class="edit btn btn-primary btn-sm" data-stuff='[&#34;{{$supplier->id}}&#34;, &#34;{{$supplier->name}}&#34;, &#34;{{$supplier->address}}&#34;, &#34;{{$supplier->contact_no}}&#34;]'><i class="fas fa-pen"></i> Edit</a> 
-                                 <button type="submit" class="btn btn-danger btn-sm remove" data-id="{{$supplier->id}}"><i class="fas fa-trash"></i> Remove</button>
+                                    @can('admin')
+                                            <button type="submit" class="btn btn-danger btn-sm remove" data-id="{{$supplier->id}}"><i class="fas fa-trash"></i> Remove</button>
+                                    @endcan
                                  </form></td>
                                  </tr>
                              @endforeach
@@ -135,7 +137,6 @@
 @section('script')
     <script>
        $(document).ready(function(){
-            $('.loading-spinner').hide();
             $('.spinner').hide();
             $('#mytable').DataTable({
                 responsive:true,
@@ -220,6 +221,8 @@
                     }
                 })
             })
+            $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
        })
     </script>
 @endsection

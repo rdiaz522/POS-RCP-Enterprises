@@ -127,24 +127,28 @@
                   <th>PRICE</th>
                   <th>QUANTITY</th>
                   <th>SUBTOTAL</th>
+                  <th>DISCOUNT</th>
                   <th>DATE OF TRANSACTION</th>
                   <th>CASHIER</th>
                 </tr>
               </thead>
               <tbody>
                 @if (count($sales) > 0)
-                    @foreach ($sales as $sale)
-                        <tr>
-                            <td style="display:none">{{$sale->id}}</td>
-                            <td>{{$sale->name}}</td>
-                            <td>{{$sale->net_wt}}</td>
-                            <td>₱ {{number_format($sale->price, 2)}}</td>
-                            <td>{{$sale->quantity}}</td>
-                            <td>{{$sale->subtotal}}</td>
-                            <td>{{$sale->created_at->calendar()}}</td>
-                            <td>{{$sale->cashier}}</td>
-                        </tr>
+                   @foreach ($sales->chunk(250) as $item)
+                    @foreach ($item as $sale)
+                    <tr>
+                        <td style="display:none">{{$sale->id}}</td>
+                        <td>{{$sale->name}}</td>
+                        <td>{{$sale->net_wt}}</td>
+                        <td>₱ {{number_format($sale->price, 2)}}</td>
+                        <td>{{$sale->quantity}}</td>
+                        <td>{{$sale->subtotal}}</td>
+                        <td>{{$sale->discount}}%</td>
+                        <td>{{$sale->created_at->calendar()}}</td>
+                        <td>{{$sale->cashier}}</td>
+                    </tr>
                     @endforeach
+                   @endforeach
                 @endif
               </tbody>
             </table>
@@ -163,7 +167,6 @@
 @section('script')
 <script>
 $(document).ready(function(){
-  $('.loading-spinner').hide();
   $.ajaxSetup({
     headers: {
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -302,9 +305,12 @@ $(document).ready(function(){
                       }
                   }
               });
+              $('.loading-spinner').hide();
+              $('#blur').attr('id', 'notblur');
       }
 
       getSales();
+      
   
 })
       

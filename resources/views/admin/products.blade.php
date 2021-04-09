@@ -35,41 +35,43 @@
                     <tbody>    
                                             
                         @if (count($products) > 0)
-                            @foreach ($products as $product)
-                                <tr>
-                                    <td><img src="data:image/png;base64,{{DNS1D::getBarcodePNG($product->barcode, 'EAN13')}}" alt="barcode" /> <a href="{{route('products.show', $product->barcode)}}" class="btn btn-warning">Print Barcode</a></td>
-                                    <td><img src="/storage/product_images/{{$product->image}}" alt="Product Image" width="70" height="70" class="float-left"></td>
-                                    <td class="text-truncate"  style="max-width:100px; vertical-align: middle;" >{{$product->name}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->net_wt}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->unit}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->price,2)}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{number_format($product->stocks->quantity)}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->profit,2)}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->added_by}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->brand}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">@if ($product->categories !== null)
-                                        {{$product->categories->name}}
-                                    @else
-                                        {{'Pending'}}
-                                    @endif </td>
-                                    <td class="text-truncat" style="max-width:100px; vertical-align: middle;">@if($product->suppliers !== null)
-                                        {{$product->suppliers->name}}
-                                    @else
-                                        {{'Pending'}}
-                                    @endif</td>
-                                    
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">
-                                    <form action="{{route('products.update',$product->id)}}" id="{{$product->id}}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        @can('admin')
-                                        <a href="#" class="edit btn btn-primary btn-sm" data-id="{{$product->id}}"><i class="fas fa-pen"></i>Edit</a>
-                                            <button type="submit" class="remove btn btn-danger btn-sm" data-id="{{$product->id}}"><i class="fas fa-trash"></i> Remove</button>
-                                        @endcan
-                                        </form>
-                                    </td>
-                               
-                                </tr>
+                            @foreach ($products->chunk(50) as $chunk)
+                                @foreach ($chunk as $product)
+                                    <tr>
+                                        <td><img src="data:image/png;base64,{{DNS1D::getBarcodePNG($product->barcode, 'EAN13')}}" alt="barcode" /> <a href="{{route('products.show', $product->barcode)}}" class="btn btn-warning">Print Barcode</a></td>
+                                        <td><img src="/storage/product_images/{{$product->image}}" alt="Product Image" width="70" height="70" class="float-left"></td>
+                                        <td class="text-truncate"  style="max-width:100px; vertical-align: middle;" >{{$product->name}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->net_wt}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->unit}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->price,2)}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{number_format($product->stocks->quantity)}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->profit,2)}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->added_by}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->brand}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">@if ($product->categories !== null)
+                                            {{$product->categories->name}}
+                                        @else
+                                            {{'Pending'}}
+                                        @endif </td>
+                                        <td class="text-truncat" style="max-width:100px; vertical-align: middle;">@if($product->suppliers !== null)
+                                            {{$product->suppliers->name}}
+                                        @else
+                                            {{'Pending'}}
+                                        @endif</td>
+                                        
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">
+                                        <form action="{{route('products.update',$product->id)}}" id="{{$product->id}}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
+                                            @can('admin')
+                                            <a href="#" class="edit btn btn-primary btn-sm" data-id="{{$product->id}}"><i class="fas fa-pen"></i>Edit</a>
+                                                <button type="submit" class="remove btn btn-danger btn-sm" data-id="{{$product->id}}"><i class="fas fa-trash"></i> Remove</button>
+                                            @endcan
+                                            </form>
+                                        </td>
+                                
+                                    </tr>
+                                @endforeach
                             @endforeach
                         @endif
                     </tbody>
@@ -269,7 +271,7 @@
                         <input type="text" name="unit" id="unite" class="form-control form-control-sm" maxlength="15">  
                   </div>
                   <div class="form-group">
-                    <label>Price</label>
+                    <label>Selling Price</label>
                         <input type="text" name="price" id="pricee" class="form-control form-control-sm" maxlength="11">  
                   </div>
                   <div class="form-group">
@@ -343,7 +345,6 @@
 @section('script')
    <script>
     $(document).ready(function(){
-        $('.loading-spinner').hide();
         $('.spinner').hide();
 
         $('#save').on('click', function(e){
@@ -794,6 +795,8 @@
                 }
             })
          })
+        $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
     })
    </script>
 @endsection

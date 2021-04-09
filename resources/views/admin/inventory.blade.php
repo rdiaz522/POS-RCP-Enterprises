@@ -114,7 +114,6 @@
 @section('script')
    <script>
     $(document).ready(function(){
-        $('.loading-spinner').hide();
         $('.spinner').hide();
         var total = 0;
         var stockout =0;
@@ -246,7 +245,8 @@
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
         }); 
-         
+        $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
     })
    </script>
 @endsection
