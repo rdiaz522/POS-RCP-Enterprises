@@ -31,7 +31,9 @@
                                             @csrf
                                             @method('DELETE')
                                             <a href="#" class="edit btn btn-primary btn-sm" data-id="{{$category->id}}" data-name="{{$category->name}}"><i class="fas fa-pen"></i> Edit</a> 
+                                            @can('admin')
                                             <button class="remove btn btn-danger btn-sm"  data-id="{{$category->id}}"><i class="fas fa-trash"></i> Remove</button>
+                                            @endcan
                                         </form>
                                         </td>
                                         </tr>
@@ -108,7 +110,6 @@
 @section('script')
     <script>
         $(document).ready(function(e){
-            $('.loading-spinner').hide();
             $('.spinner').hide();
             $('#mytable').DataTable({
                 responsive:true,
@@ -196,6 +197,8 @@
                 $('#addfrm').submit();
 
             })
+            $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
         })
     </script>
 @endsection

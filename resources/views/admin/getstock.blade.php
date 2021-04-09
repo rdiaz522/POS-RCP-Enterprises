@@ -32,25 +32,27 @@
                     </thead>
                     <tbody>
                         @if (count($stocks) > 0)
-                            @foreach ($stocks as $stock)
-                                <tr>
-                                    <td>{{$stock->id}}</td>
-                                    <td class="text-truncate">{{$stock->item}}</td>
-                                    <td class="text-truncate">{{$stock->net_wt}}</td>
-                                    <td class="text-truncate">{{$stock->unit}}</td>
-                                    <td class="text-truncate">{{$stock->brand}}</td>
-                                    <td >{{$stock->oldstock}}</td>
-                                    @if ($stock->status == 'Stock In')
-                                        <td class="bg-green">{{$stock->status}} +</td>
-                                    @else
-                                        <td class="bg-red">{{$stock->status}} -</td>
-                                    @endif
-                                    <td>{{$stock->quantity}}</td>
-                                    <td>{{$stock->newstock}}</td>
-                                    <td class="text-truncate">{{$stock->description}}</td>
-                                    <td>{{$stock->stock_by}}</td>
-                                    <td class="text-truncate">{{$stock->created_at->calendar()}}</td>
-                                </tr>
+                            @foreach ($stocks->chunk(250) as $item)
+                                    @foreach ($item as $stock)
+                                    <tr>
+                                        <td>{{$stock->id}}</td>
+                                        <td class="text-truncate">{{$stock->item}}</td>
+                                        <td class="text-truncate">{{$stock->net_wt}}</td>
+                                        <td class="text-truncate">{{$stock->unit}}</td>
+                                        <td class="text-truncate">{{$stock->brand}}</td>
+                                        <td >{{$stock->oldstock}}</td>
+                                        @if ($stock->status == 'Stock In')
+                                            <td class="bg-success">{{$stock->status}} +</td>
+                                        @else
+                                            <td class="bg-danger">{{$stock->status}} -</td>
+                                        @endif
+                                        <td>{{$stock->quantity}}</td>
+                                        <td>{{$stock->newstock}}</td>
+                                        <td class="text-truncate">{{$stock->description}}</td>
+                                        <td>{{$stock->stock_by}}</td>
+                                        <td class="text-truncate">{{$stock->created_at->calendar()}}</td>
+                                    </tr>
+                                @endforeach
                             @endforeach
                         @endif
                     </tbody>
@@ -68,8 +70,8 @@
 
 @section('script')
     <script>
-        $('.loading-spinner').hide();
-        $('.spinner').hide();
+        $(document).ready(function() {
+            $('.spinner').hide();
         $('#mytable').DataTable({
             responsive:true,
             order: [ [0, 'desc'] ],
@@ -133,6 +135,10 @@
        
       }
     )
-
+    
+            $('.loading-spinner').hide();
+            $('#blur').attr('id', 'notblur');
+        })
+    
     </script>
 @endsection

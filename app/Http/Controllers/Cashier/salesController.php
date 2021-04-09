@@ -9,19 +9,13 @@ use App\Stocks;
 use App\Invoice;
 use App\Product;
 use App\Settings;
-use App\Items\Items;
 use Mike42\Escpos\Printer;
 use Illuminate\Http\Request;
-use Mike42\Escpos\EscposImage;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
-use Mike42\Escpos\CapabilityProfile;
-use Mike42\Escpos\PrintConnectors\FilePrintConnector;
-use Mike42\Escpos\PrintConnectors\NetworkPrintConnector;
 use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-use Illuminate\Support\Str;
 class salesController extends Controller
 {
     /**
@@ -95,6 +89,7 @@ class salesController extends Controller
                     $sales->invoice_number = $invoice_no;
                     $sales->cashier = Auth::user()->username;
                     $sales->barcode = $cart['barcode'];
+                    $sales->discount = $cart['discount'];
                     $sales->save();
                     $stock = Stocks::find($cart['id']);
                     $stock->quantity = $stock->quantity - $cart['quantity'];

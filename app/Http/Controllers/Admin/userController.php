@@ -95,6 +95,10 @@ class userController extends Controller
         $roles = Role::all();
         $user = User::find($id);
         $user->username = $request->username;
+        if (!Hash::check($request->password,  $user->password)) {
+            $user->password = Hash::make($request->password);
+        }
+    
         $user->save();        
        foreach ($roles as $role) {
          $role->users()->updateExistingPivot($id,['role_id' => $roleVal->id]);

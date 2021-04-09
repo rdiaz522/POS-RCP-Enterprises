@@ -142,7 +142,6 @@
 @section('script')
     <script>
        $(document).ready(function(){
-            $('.loading-spinner').hide();
             $('.spinner').hide();
             $('#mytable').DataTable({
                 order: [ [0, 'desc'] ],
@@ -243,6 +242,8 @@
                     }
                 })
             })
+            $('.loading-spinner').hide();
+        $('#blur').attr('id', 'notblur');
        })
     </script>
 @endsection

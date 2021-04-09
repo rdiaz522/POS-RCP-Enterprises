@@ -125,23 +125,27 @@
                       <th>PRICE</th>
                       <th>QUANTITY</th>
                       <th>SUBTOTAL</th>
+                      <th>DISCOUNT</th>
                       <th>DATE OF TRANSACTION</th>  
                       <th>CASHIER</th>
                     </tr>
                   </thead>
                   <tbody>
                     @if (count($sales) > 0)
-                        @foreach ($sales as $sale)
-                            <tr>
-                                <td style="display:none">{{$sale->id}}</td>
-                                <td>{{$sale->name}}</td>
-                                <td>₱ {{$sale->price}}</td>
-                                <td>{{$sale->quantity}}</td>
-                                <td>{{$sale->subtotal}}</td>
-                                <td>{{$sale->created_at->calendar()}}</td>
-                                <td>{{$sale->cashier}}</td>
-                            </tr>
+                      @foreach ($sales->chunk(250) as $item)
+                        @foreach ($item as $sale)
+                        <tr>
+                            <td style="display:none">{{$sale->id}}</td>
+                            <td>{{$sale->name}}</td>
+                            <td>₱ {{$sale->price}}</td>
+                            <td>{{$sale->quantity}}</td>
+                            <td>{{$sale->discount}}%</td>
+                            <td>{{$sale->subtotal}}</td>
+                            <td>{{$sale->created_at->calendar()}}</td>
+                            <td>{{$sale->cashier}}</td>
+                        </tr>
                         @endforeach
+                      @endforeach
                     @endif
                   </tbody>
                 </table>
@@ -160,7 +164,6 @@
 @section('script')
     <script>
           $(document).ready(function(){
-            $('.loading-spinner').hide();
             $('#dashboard').prop("class","nav-link active");
             $('#mytable').DataTable({
                 responsive:true,
@@ -295,7 +298,6 @@
                 bgcolor = 'rgba(0, 0, 0,0)';
               }
               var ctx = document.getElementById('myChart');
-              console.log(dataTotal);
               var myChart = new Chart(ctx, {
                   type: typeChart,
                   data: {
@@ -323,6 +325,9 @@
 
                   },
               });
+
+              $('.loading-spinner').hide();
+              $('#blur').attr('id', 'notblur');
           })
     </script>
 @endsection
