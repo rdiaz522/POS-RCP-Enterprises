@@ -47,8 +47,8 @@ class voidController extends Controller
         $voids->unit = $request->item_unit;
         $voids->price = $request->item_price;
         $voids->profit = $request->item_profit;
-        $voids->quantity = $request->item_quantity;
-        $voids->subtotal = number_format($request->item_quantity * $request->item_price,2);
+        $voids->quantity = (float)$request->item_quantity;
+        $voids->subtotal = number_format((float)$request->item_quantity * (float)$request->item_price,2);
         $voids->cashier = $request->item_cashier;
         $voids->invoice_number = $request->item_inv;
         $voids->reason = $request->reason;
@@ -56,8 +56,8 @@ class voidController extends Controller
         $voids->save();
 
         $sale = Sales::find($request->item_id);
-        $newquant = $sale->quantity - $request->item_quantity;
-        $newtotal = $newquant * $request->item_price;
+        $newquant = (float)$sale->quantity - (float)$request->item_quantity;
+        $newtotal = $newquant * (float)$request->item_price;
 
         if($request->item_status == 'Rejected'){
             if($sale->quantity == $request->item_quantity){
@@ -72,7 +72,7 @@ class voidController extends Controller
         }else{
             $stocks = Stocks::where('barcode',$request->item_barcode)->get();
             foreach ($stocks as $stock) {
-                $stock->quantity = $stock->quantity + $request->item_quantity;
+                $stock->quantity = (float)$stock->quantity + (float)$request->item_quantity;
                 $stock->save();
             }
             if($sale->quantity == $request->item_quantity){

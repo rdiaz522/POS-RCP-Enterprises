@@ -44,7 +44,7 @@
                                         <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->net_wt}}</td>
                                         <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->unit}}</td>
                                         <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->price,2)}}</td>
-                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{number_format($product->stocks->quantity)}}</td>
+                                        <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->stocks->quantity}}</td>
                                         <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->profit,2)}}</td>
                                         <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->added_by}}</td>
                                         <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->brand}}</td>
@@ -64,10 +64,12 @@
                                             @csrf
                                             @method('DELETE')
                                             @can('admin')
-                                            <a href="#" class="edit btn btn-primary btn-sm" data-id="{{$product->id}}"><i class="fas fa-pen"></i>Edit</a>
-                                                <button type="submit" class="remove btn btn-danger btn-sm" data-id="{{$product->id}}"><i class="fas fa-trash"></i> Remove</button>
+                                             <a href="#" class="edit btn btn-primary btn-sm" data-id="{{$product->id}}"><i class="fas fa-pen"></i>Edit</a>
+                                             <button type="submit" class="remove btn btn-danger btn-sm" data-id="{{$product->id}}"><i class="fas fa-trash"></i> Remove</button>
                                             @endcan
                                             </form>
+
+                                            
                                         </td>
                                 
                                     </tr>
@@ -644,18 +646,17 @@
             $('#supplier').val("").change();
             $('#image').val("");
         })
-        $('#mytable').DataTable( {
+        $('#mytable').DataTable({
                 responsive: true,
                 dom: 'Bfrtip',
                 buttons: [
                     'copy', 'csv', 'excel', 'pdf', 'print'
                 ]
         }); 
-         $('.edit').on('click', function(){
-           
-             id = $(this).attr('data-id');
-             $('#edit_product').modal('show');
-             $.ajax({
+
+        $("body").on("click", ".edit", function(event){ 
+            var id = $(this).attr('data-id');
+            $.ajax({
                      url:"{{ url('index.php/products/') }}"+ '/' + id + '/edit',
                      method:'GET',
                      success:function(data){
@@ -678,8 +679,11 @@
                                 $('#status2').attr('checked', true);
                             }
                         }
+
+                        $('#edit_product').modal('show');
                     }
-                })
+            })
+
             $('#formedit').submit(function(e){
                 var num = $('#pricee').val();
                 var val = 0;
@@ -779,9 +783,10 @@
                     }
                 })
             });
-         })
-         $('.remove').click(function(e){
-            var pid = $(this).attr('data-id');
+        });
+
+        $("body").on("click", ".remove", function(e) {
+          var pid = $(this).attr('data-id');  
             e.preventDefault();
             Toast2.fire({
                 type: 'warning',
@@ -794,7 +799,7 @@
                     e.preventDefault();
                 }
             })
-         })
+        });
         $('.loading-spinner').hide();
         $('#blur').attr('id', 'notblur');
     })

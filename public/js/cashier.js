@@ -541,7 +541,7 @@ $(document).ready(function(){
 
                     //add item into cart
                     cart_add = () => {
-                        let quantity = parseInt($('#quantity').val());
+                        let quantity = parseFloat($('#quantity').val());
                         if(quantity && quantity > 0){
                             if(quantity <= parseInt($('#stocks').val())){
                                 $('#payment').attr('disabled', false);
@@ -825,7 +825,7 @@ $(document).ready(function(){
         }   
     getdata();
     $('#salesTable').on('click',".void",function(){
-        var data = $(this).data('stuff');
+        let data = $(this).data('stuff');
         $('#void').modal('show');
         if($('.reason').val() !== ''){
             $('.item_void').prop('disabled', false);

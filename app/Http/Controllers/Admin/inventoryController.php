@@ -70,7 +70,7 @@ class inventoryController extends Controller
                 $stocklogs->oldstock = $request->old;
                 $stocklogs->newstock = $request->newstock;
                 $stocklogs->status = $request->stockstatus;
-                $stocklogs->quantity = $request->quantity;
+                $stocklogs->quantity = (float)$request->quantity;
                 $stocklogs->description = $request->message_stock;
                 $stocklogs->stock_by = auth()->user()->username;
                 $stocklogs->save();

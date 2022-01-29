@@ -221,7 +221,9 @@
                 end = moment().subtract(1, 'month').endOf('month');
             }
 
-            var sales = JSON.parse('{{$sales}}'.replace(/&quot;/g,'"'))
+            var salesString = JSON.stringify('{{$sales}}'.replace(/&quot;/g,'"'));
+            var sales = salesString.replace(/\\/g, "");
+            console.log(sales);
             $('#daterange-btn').daterangepicker(
               {
                 ranges   : {
@@ -253,7 +255,7 @@
               const subtotalArray = [];
               for(let i = 0; i < sales.length;i++){
                   const dateRaw = sales[i].created_at;
-                  const subtotalRaw =  parseFloat(sales[i].subtotal.replace(/,/g, ''));
+                  const subtotalRaw =  parseFloat(sales[i].subtotal);
                   var date = new Date(dateRaw);
                   if(label == 'Yesterday' || label == 'Last 7 Days'){
                     var dateDay = moment(date).format('dddd');

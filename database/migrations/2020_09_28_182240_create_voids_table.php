@@ -25,7 +25,7 @@ class CreateVoidsTable extends Migration
             $table->string('cashier');
             $table->string('status')->nullable();
             $table->string('invoice_number')->nullable();
-            $table->string('reason');
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }

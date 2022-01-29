@@ -96,8 +96,12 @@
                                 <td>{{$sale->quantity}}</td>
                                 <td>₱ {{$sale->subtotal}}</td>
                                 <td>{{$sale->discount}}%</td>
-                                <td>{{$sale->cashier}}</td>
-                                <td><a id="{{$sale->id}}"  data-stuff='[&#34;{{$sale->id}}&#34;, &#34;{{$sale->invoice_number}}&#34;, &#34;{{$sale->name}}&#34;, &#34;{{$sale->net_wt}}&#34;, &#34;{{$sale->unit}}&#34;,&#34;{{$sale->price}}&#34;,&#34;{{$sale->quantity}}&#34;,&#34;{{$sale->subtotal}}&#34;,&#34;{{$sale->cashier}}&#34;,&#34;{{$sale->barcode}}&#34;,&#34;{{$sale->profit}}&#34;]' class="void btn btn-danger btn-sm"><i class="fas fa-ban"></i> Cancel</a>
+                                <td>{{$sale->cashier}}</td> 
+                                @php
+                                    $name = str_replace('"', "", $sale->name);
+                                    $quantity = (float)$sale->quantity;
+                                @endphp
+                                <td><a id="{{$sale->id}}"  data-stuff='[&#34;{{$sale->id}}&#34;, &#34;{{$sale->invoice_number}}&#34;, &#34;{{$name}}&#34;, &#34;{{$sale->net_wt}}&#34;, &#34;{{$sale->unit}}&#34;,&#34;{{$sale->price}}&#34;,&#34;{{$quantity}}&#34;,&#34;{{$sale->subtotal}}&#34;,&#34;{{$sale->cashier}}&#34;,&#34;{{$sale->barcode}}&#34;,&#34;{{$sale->profit}}&#34;]' class="void btn btn-danger btn-sm"><i class="fas fa-ban"></i> Cancel</a>
                                 </td>
                             </tr>
                         @endforeach
@@ -184,7 +188,7 @@
             </div>
             <div class="form-group">
                 <label for="item_quantity">Quantity</label>
-                <input type="number" name="item_quantity" id="item_quantity" min="1" class="form-control">
+                <input type="text" name="item_quantity" id="item_quantity" class="form-control">
             </div>
         <textarea name="reason" id="" cols="5" rows="7" class="form-control reason" placeholder="Leave message here..."></textarea>
         <input type="text" name="item_id" id="item_id" hidden>

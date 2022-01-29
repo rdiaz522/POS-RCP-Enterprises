@@ -38,7 +38,7 @@
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->net_wt}}</td>
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->unit}}</td>
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">₱ {{number_format($product->price,2)}}</td>
-                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{number_format($product->stocks->quantity)}}</td>
+                                    <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->stocks->quantity}}</td>
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">{{$product->brand}}</td>
                                     <td class="text-truncate" style="max-width:100px; vertical-align: middle;">@if ($product->categories !== null)
                                         {{$product->categories->name}}
@@ -190,8 +190,8 @@
                     $('#total').hide();
                 }else{
                     $('#total').show();
-                    total = parseInt(current_total) + parseInt($(this).val());
-                    stockout = parseInt(current_total) - parseInt($(this).val());
+                    total = parseFloat(current_total) + parseFloat($(this).val());
+                    stockout = parseFloat(current_total) - parseFloat($(this).val());
                     $('#total').text(total);
                     $('#stockout').text(stockout);
                     if(stockout < 0){

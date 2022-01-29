@@ -25,11 +25,18 @@ class salesController extends Controller
      */
     public function index()
     {   
+        $today = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
+        $todayTwo = Carbon::today()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
         $cashier = Auth::user()->username;
-        $sales = Sales::whereDate('created_at', Carbon::today())->where('cashier',$cashier)->orderBy('created_at', 'desc')->get();
-        $customers = Customer::all();
-        $setting  = Settings::all();
-        return view('cashier.index')->with(['sales' => $sales, 'customers' => $customers,'settings' => $setting]);
+        if(isset($cashier) && !empty($cashier)) {
+            $sales = Sales::whereDate('created_at','<=', $today)->whereDate('created_at', '>=', $todayTwo)->where('cashier',$cashier)->orderBy('created_at', 'desc')->get();
+            $customers = Customer::all();
+            $setting  = Settings::all();
+            return view('cashier.index')->with(['sales' => $sales, 'customers' => $customers,'settings' => $setting]);
+        }
+
+        return 'Please Login your Cashier Account!';
+       
     }
     /**
      * Show the form for creating a new resource.
@@ -57,72 +64,74 @@ class salesController extends Controller
     {   
 
         if ($request->ajax()) {
-            if($request->cart){
-                $carts = $request->cart;
-                $change = $request->cash - $request->total;
-                $year = date('Y');
-                $month = date('m');
-                $day = date('d');
-                $invoice = Invoice::all();
-                $invCount = $invoice->count() + 1;
-                $no =str_pad($invCount,7,"0",STR_PAD_LEFT );
-                $invoice_no = $year . $month . $day . $no;
-                $vatsales = 0;
-                $vatexempt = 0;
-                $vat = 0;
-                foreach ($carts as $cart) {
-                    if ($cart['status'] == 'V') {
-                        $vatsales += floatval(str_replace(',', '', $cart['subtotal'])) / 1.12;
-                        $vat += floatval(str_replace(',', '', $cart['subtotal'])) - round($vatsales, 2);
-                    } else {
-                        $vatexempt += floatval(str_replace(',', '', $cart['subtotal']));
+            if(isset(Auth::user()->username) && !empty(Auth::user()->username)) {
+                if($request->cart){
+                    $carts = $request->cart;
+                    $change = (float)$request->cash - (float)$request->total;
+                    $year = date('Y');
+                    $month = date('m');
+                    $day = date('d');
+                    $invoice = Invoice::all();
+                    $invCount = $invoice->count() + 1;
+                    $no =str_pad($invCount,7,"0",STR_PAD_LEFT );
+                    $invoice_no = $year . $month . $day . $no;
+                    $vatsales = 0;
+                    $vatexempt = 0;
+                    $vat = 0;
+                    foreach ($carts as $cart) {
+                        if ($cart['status'] == 'V') {
+                            $vatsales += (float)str_replace(',', '', $cart['subtotal']) / 1.12;
+                            $vat += (float)str_replace(',', '', $cart['subtotal']) - round($vatsales, 2);
+                        } else {
+                            $vatexempt += (float)str_replace(',', '', $cart['subtotal']);
+                        }
+                        $sales = new Sales;
+                        $sales->name = $cart['name'];
+                        $sales->net_wt = $cart['net_wt'];
+                        $sales->unit = $cart['unit'];
+                        $sales->price = $cart['price'];
+                        $sales->profit = $cart['profit'];
+                        $sales->quantity = (float)$cart['quantity'];
+                        $sales->subtotal = $cart['subtotal'];
+                        $sales->vatable = $cart['status'];
+                        $sales->invoice_number = $invoice_no;
+                        $sales->cashier = Auth::user()->username;
+                        $sales->barcode = $cart['barcode'];
+                        $sales->discount = $cart['discount'];
+                        $sales->save();
+                        $stock = Stocks::find($cart['id']);
+                        $stock->quantity = (float)$stock->quantity - (float)$cart['quantity'];
+                        $stock->save();
                     }
-                    $sales = new Sales;
-                    $sales->name = $cart['name'];
-                    $sales->net_wt = $cart['net_wt'];
-                    $sales->unit = $cart['unit'];
-                    $sales->price = $cart['price'];
-                    $sales->profit = $cart['profit'];
-                    $sales->quantity = $cart['quantity'];
-                    $sales->subtotal = $cart['subtotal'];
-                    $sales->vatable = $cart['status'];
-                    $sales->invoice_number = $invoice_no;
-                    $sales->cashier = Auth::user()->username;
-                    $sales->barcode = $cart['barcode'];
-                    $sales->discount = $cart['discount'];
-                    $sales->save();
-                    $stock = Stocks::find($cart['id']);
-                    $stock->quantity = $stock->quantity - $cart['quantity'];
-                    $stock->save();
-                }
-                $invoice = new Invoice;
-                $invoice->invoice_number = $invoice_no;
-                $invoice->cashier = Auth::user()->username;
-                $invoice->item_qty = count($carts);
-                $invoice->total = number_format($request->total, 2);
-                $invoice->cash = number_format($request->cash, 2);
-                $invoice->discount = $request->discount;
-                $invoice->change = number_format($change, 2);
-                $invoice->VAT_sales = number_format(round($vatsales, 2), 2);
-                $invoice->VAT_exempt = number_format($vatexempt, 2);
-                $invoice->VAT_zerorate = 0;
-                $invoice->VAT = number_format($vat, 2);
-                $invoice->save();
+                    $invoice = new Invoice;
+                    $invoice->invoice_number = $invoice_no;
+                    $invoice->cashier = Auth::user()->username;
+                    $invoice->item_qty = count($carts);
+                    $invoice->total = number_format($request->total, 2);
+                    $invoice->cash = number_format($request->cash, 2);
+                    $invoice->discount = $request->discount;
+                    $invoice->change = number_format($change, 2);
+                    $invoice->VAT_sales = number_format(round($vatsales, 2), 2);
+                    $invoice->VAT_exempt = number_format($vatexempt, 2);
+                    $invoice->VAT_zerorate = 0;
+                    $invoice->VAT = number_format($vat, 2);
+                    $invoice->save();
 
-                if($request->customer){
-                    $customer_invoice = new CustomerInvoice;
-                    $customer_invoice->invoice_no = $invoice_no;
-                    $customer_invoice->customer = $request->customer;
-                    $customer_invoice->address = $request->customer_address;
-                    $customer_invoice->business_style = $request->business_style;
-                    $customer_invoice->save();
+                    if($request->customer){
+                        $customer_invoice = new CustomerInvoice;
+                        $customer_invoice->invoice_no = $invoice_no;
+                        $customer_invoice->customer = $request->customer;
+                        $customer_invoice->address = $request->customer_address;
+                        $customer_invoice->business_style = $request->business_style;
+                        $customer_invoice->save();
+                    }
+                    return response()->json($invoice_no);
+                }else{
+                    return 0;
                 }
+            } else {
 
-                return response()->json($invoice_no);
-            }else{
-                return 0;
             }
-            
         }
     }
 

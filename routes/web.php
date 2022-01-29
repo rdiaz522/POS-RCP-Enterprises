@@ -37,7 +37,9 @@ Route::get('/home', function () {
     ];
     $dayOfTheWeek = Carbon::now()->dayOfWeek;
     $weekday = $weekMap[$dayOfTheWeek];
-    $sales = Sales::whereDate('created_at', Carbon::today())->orderBy('created_at', 'desc')->get();
+    $today = Carbon::now()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
+    $todayTwo = Carbon::today()->timezone('Asia/Manila')->format('Y-m-d H:i:s');
+    $sales = Sales::whereDate('created_at', '<=' , $today)->whereDate('created_at', '>=', $todayTwo)->orderBy('created_at', 'desc')->get();
     $invoice = Invoice::whereDate('created_at', Carbon::today())->where('status', 'printed')->get();
     return view('admin.index')->with(['sales' => $sales, 'weekday' => $weekday , 'invoice' => $invoice]);
     // dd($invoice);
